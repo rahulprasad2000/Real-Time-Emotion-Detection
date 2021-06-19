@@ -3,7 +3,7 @@ from camera import VideoCamera
 import os 
 from flask import send_from_directory 
 import cv2    
-
+from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 
@@ -30,7 +30,9 @@ def video_feed():
            mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
-    app.run(host=os.getenv('HOST', '127.0.0.1'), port=os.getenv('PORT', 5000), debug=app.config.get('FLASK_DEBUG'))
+    # app.run(host=os.getenv('HOST', '127.0.0.1'), port=os.getenv('PORT', 5000), debug=app.config.get('FLASK_DEBUG'))
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()
    
     
     
